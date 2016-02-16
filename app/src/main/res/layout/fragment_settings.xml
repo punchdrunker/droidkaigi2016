@@ -105,6 +105,13 @@
             app:settingDescription="@string/settings_heads_up_notification_description"
             app:settingTitle="@string/settings_heads_up_notification" />
 
+        <View style="@style/Border" />
+
+        <com.google.android.gms.common.SignInButton
+            android:id="@+id/sign_in_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
         <View android:id="@+id/heads_up_border" style="@style/Border" android:visibility="gone" />
 
     </LinearLayout>

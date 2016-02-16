@@ -12,6 +12,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -26,7 +31,7 @@ import io.github.droidkaigi.confsched.util.LocaleUtil;
 import io.github.droidkaigi.confsched.util.PrefUtil;
 import rx.Observable;
 
-public class SettingsFragment extends Fragment {
+public class SettingsFragment extends Fragment implements GoogleApiClient.OnConnectionFailedListener {
 
     public static final String TAG = SettingsFragment.class.getSimpleName();
 
@@ -37,6 +42,7 @@ public class SettingsFragment extends Fragment {
 
     private FragmentSettingsBinding binding;
 
+    private GoogleApiClient googleApiClient;
     public static SettingsFragment newInstance() {
         return new SettingsFragment();
     }
@@ -70,6 +76,8 @@ public class SettingsFragment extends Fragment {
                 binding.headsUpSwitchRow.setChecked(isChecked);
             });
         }
+        doNotCall();
+        binding.signInButton.setOnClickListener(v -> googleApiClient.connect());
     }
 
     private void showLanguagesDialog() {
@@ -104,4 +112,20 @@ public class SettingsFragment extends Fragment {
         activity.finish();
     }
 
+    private void doNotCall() {
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+
+         googleApiClient = new GoogleApiClient.Builder(getActivity())
+                .enableAutoManage(getActivity() /* FragmentActivity */, this /* OnConnectionFailedListener */)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
+
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+
+    }
 }
