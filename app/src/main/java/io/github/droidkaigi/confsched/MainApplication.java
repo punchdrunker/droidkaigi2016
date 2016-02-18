@@ -52,11 +52,16 @@ public class MainApplication extends Application {
                 .appModule(new AppModule(this))
                 .build();
 
+
+        setUpDebugLibraries();
+
+        AndroidThreeTen.init(this);
+    }
+
+    protected void setUpDebugLibraries() {
         Fabric.with(this, new Crashlytics());
 
         new StethoWrapper(this).setup();
-
-        AndroidThreeTen.init(this);
     }
 
 }
